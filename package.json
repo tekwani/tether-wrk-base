@@ -1,0 +1,29 @@
+{
+  "name": "tpl-wrk",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peartree-to/tpl-wrk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/peartree-to/tpl-wrk/issues"
+  },
+  "homepage": "https://github.com/peartree-to/tpl-wrk#readme",
+  "dependencies": {
+    "async": "^3.2.5",
+    "bfx-svc-boot-js": "https://github.com/bitfinexcom/bfx-svc-boot-js.git",
+    "bfx-wrk-base": "git+https://github.com/bitfinexcom/bfx-wrk-base.git",
+    "debug": "^4.3.4",
+    "hp-svc-facs-net": "git+https://github.com/tetherto/hp-svc-facs-net.git",
+    "hp-svc-facs-store": "git+https://github.com/tetherto/hp-svc-facs-store.git"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  }
+}
