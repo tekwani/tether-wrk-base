@@ -48,7 +48,7 @@ class TplWrk extends WrkBase {
 
         this.saveStatus()
       }
-    ])
+    ], cb)
   }
 }
 
