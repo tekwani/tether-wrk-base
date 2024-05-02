@@ -1,9 +1,17 @@
 'use strict'
 
 const WrkBase = require('bfx-wrk-base')
+const async = require('async')
 const debug = require('debug')('wrk:proc')
 
 class TplWrk extends WrkBase {
+  constructor (conf, ctx) {
+    super(conf, ctx)
+
+    this.init()
+    this.start()
+  }
+  
   init () {
     super.init()
 
