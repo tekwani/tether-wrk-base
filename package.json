@@ -20,6 +20,7 @@
     "bfx-svc-boot-js": "https://github.com/bitfinexcom/bfx-svc-boot-js.git",
     "bfx-wrk-base": "git+https://github.com/bitfinexcom/bfx-wrk-base.git",
     "debug": "^4.3.4",
+    "dice-facs-shell": "git+https://github.com/PearTree-to/dice-facs-shell.git#init",
     "hp-svc-facs-net": "git+https://github.com/tetherto/hp-svc-facs-net.git",
     "hp-svc-facs-store": "git+https://github.com/tetherto/hp-svc-facs-store.git"
   },

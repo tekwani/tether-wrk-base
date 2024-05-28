@@ -23,7 +23,12 @@ class TplWrk extends WrkBase {
         return {
           fac_store: this.store_s0
         }
-      }, 0]
+      }, 0],
+      ['fac', 'dice-facs-shell', 's0', 's0', () => {
+        return {
+          fac_store: this.store_s0
+        }
+      }]
     ])
   }
 
