@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('brittle')
 const path = require('path')
 
