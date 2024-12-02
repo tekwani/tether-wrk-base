@@ -3,7 +3,6 @@
 const WrkBase = require('bfx-wrk-base')
 const async = require('async')
 const pino = require('pino')
-const b4a = require('b4a')
 
 class TetherWrkBase extends WrkBase {
   init () {
@@ -16,8 +15,8 @@ class TetherWrkBase extends WrkBase {
       ['fac', 'hp-svc-facs-net', 'r0', 'r0', () => ({ fac_store: this.store_s0 }), 1]
     ])
 
-    this.logger = pino({ 
-      name: `wrk:proc:${this.ctx.wtype}:${process.pid}`, 
+    this.logger = pino({
+      name: `wrk:proc:${this.ctx.wtype}:${process.pid}`,
       level: this.ctx.debug ? 'debug' : 'info'
     })
   }
@@ -26,29 +25,15 @@ class TetherWrkBase extends WrkBase {
     return this.net_r0.rpcServer.publicKey
   }
 
-  _getConfigRpcKeyPair () {
-    if (this.conf?.rpc_keypair && this.conf.rpc_keypair?.secretKey && this.conf.rpc_keypair?.publicKey) {
-      try {
-        const secretKey = b4a.from(this.conf.rpc_keypair.secretKey, 'hex')
-        const publicKey = b4a.from(this.conf.rpc_keypair.publicKey, 'hex')
-
-        return { publicKey, secretKey }
-      } catch (e) {
-        this.logger.error(`ERR_GEN_KEY_PAIR: ${e}`)
-        return null
-      }
-    }
-
-    return null
+  async _startRpcServer () {
+    await this.net_r0.startRpcServer()
   }
 
   _start (cb) {
     async.series([
       next => { super._start(next) },
       async () => {
-        const keyPair = this._getConfigRpcKeyPair()
-
-        await this.net_r0.startRpcServer(keyPair)
+        await this._startRpcServer()
         const rpcServer = this.net_r0.rpcServer
 
         rpcServer.respond('ping', x => x)
