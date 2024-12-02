@@ -1,5 +1,4 @@
 {
   "dir_log": "logs",
-  "debug": 0,
-  "rpc_keypair": { "secretKey": "", "publicKey": "" }
+  "debug": 0
 }
