@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "brittle tests/*.js",
+    "test": "brittle tests/{,**/}*.test.js",
     "test:coverage": "brittle --coverage tests/{,**/}*.test.js",
     "posttest": "npm run lint"
   },
