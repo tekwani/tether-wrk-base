@@ -11,7 +11,7 @@ class TetherWrkBase extends WrkBase {
     this.loadConf('common')
 
     this.setInitFacs([
-      ['fac', 'hp-svc-facs-store', 's0', 's0', { storeDir: `store/${this.ctx.rack}` }, 0],
+      ['fac', 'hp-svc-facs-store', 's0', 's0', { storeDir: `${this.ctx.root}/store/${this.ctx.rack}` }, 0],
       ['fac', 'hp-svc-facs-net', 'r0', 'r0', () => ({ fac_store: this.store_s0 }), 1]
     ])
 
