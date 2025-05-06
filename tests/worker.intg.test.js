@@ -1,3 +1,5 @@
+'use strict'
+
 const Worker = require('../workers/base.wrk.tether.js')
 const path = require('path')
 const tmp = require('test-tmp')
