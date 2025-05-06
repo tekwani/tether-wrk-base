@@ -3,8 +3,7 @@
 const Worker = require('../workers/base.wrk.tether.js')
 const path = require('path')
 const tmp = require('test-tmp')
-const test = require('brittle')
-const fs = require('fs')
+const { test, hook } = require('brittle')
 const fsp = require('fs').promises
 const RPC = require('@hyperswarm/rpc')
 
@@ -34,19 +33,20 @@ async function processConfigFiles (dirPath) {
   }
 }
 
-test.hook('setup hook', async function (t) {
+hook('setup hook', async function (t) {
   const dir = await tmp(t)
   rpc = new RPC()
 
   const sourceConfigPath = path.resolve(__dirname, '../config')
   const destinationConfigPath = path.join(dir, 'config')
 
-  if (fs.existsSync(sourceConfigPath)) {
+  try {
+    await fsp.access(sourceConfigPath)
     await fsp.cp(sourceConfigPath, destinationConfigPath, { recursive: true })
     console.log(`Copied config folder to: ${destinationConfigPath}`)
     await processConfigFiles(destinationConfigPath)
-  } else {
-    console.error('Config folder does not exist!')
+  } catch (err) {
+    console.error('Config folder does not exist or cannot be accessed!')
   }
 
   wrk = new Worker(
@@ -68,7 +68,7 @@ test('worker test', async function (t) {
   console.log('rpc call - ping - done')
 })
 
-test.hook('teardown hook', async function (t) {
+hook('teardown hook', async function (t) {
   await new Promise((resolve) => wrk.stop(resolve))
   await rpc.destroy()
 })
