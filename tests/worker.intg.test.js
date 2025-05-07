@@ -34,7 +34,7 @@ hook('setup hook', async function (t) {
   await new Promise((resolve) => wrk.start(resolve))
 })
 
-test('worker test', async function (t) {
+test('ping test', async function (t) {
   const pubKey = wrk.getRpcKey()
 
   const resp = await rpcReq(pubKey, 'ping', 'hello world')
