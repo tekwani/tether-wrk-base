@@ -9,7 +9,9 @@ class TetherWrkBase extends WrkBase {
     super.init()
 
     this.loadConf('common')
-    let storeDir = `store/${this.ctx.rack}`
+    const storeDir = (this.ctx.env === 'test' && this.ctx.tmpdir)
+      ? `${this.ctx.tmpdir}/store/${this.ctx.rack}`
+      : `store/${this.ctx.rack}`
 
     if (this.ctx.env === 'test' && this.ctx.tmpdir) {
       storeDir = `${this.ctx.tmpdir}/store/${this.ctx.rack}`
