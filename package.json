@@ -35,7 +35,8 @@
   "devDependencies": {
     "@hyperswarm/rpc": "3.3.2",
     "brittle": "3.7.0",
-    "standard": "17.1.0"
+    "standard": "17.1.0",
+    "test-tmp": "1.4.0"
   },
   "repository": {
     "type": "git",

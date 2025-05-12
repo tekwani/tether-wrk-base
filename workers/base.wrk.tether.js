@@ -9,9 +9,12 @@ class TetherWrkBase extends WrkBase {
     super.init()
 
     this.loadConf('common')
+    const storeDir = (this.ctx.env === 'test' && this.ctx.tmpdir)
+      ? `${this.ctx.tmpdir}/store/${this.ctx.rack}`
+      : `store/${this.ctx.rack}`
 
     this.setInitFacs([
-      ['fac', 'hp-svc-facs-store', 's0', 's0', { storeDir: `store/${this.ctx.rack}` }, 0],
+      ['fac', 'hp-svc-facs-store', 's0', 's0', { storeDir }, 0],
       ['fac', 'hp-svc-facs-net', 'r0', 'r0', () => ({ fac_store: this.store_s0 }), 1]
     ])
 
