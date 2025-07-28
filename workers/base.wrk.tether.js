@@ -20,7 +20,8 @@ class TetherWrkBase extends WrkBase {
 
     this.logger = pino({
       name: `wrk:proc:${this.ctx.wtype}:${process.pid}`,
-      level: this.conf.debug || this.ctx.debug ? 'debug' : 'info'
+      level: this.conf.debug || this.ctx.debug ? 'debug' : 'info',
+      enabled: this.ctx.logging ?? true
     })
   }
 
