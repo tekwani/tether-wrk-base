@@ -31,7 +31,7 @@ class TetherWrkBase extends WrkBase {
         { level: 'error', stream: stderr },
         { level: 'warn', stream: stderr },
         { level: 'fatal', stream: stderr }
-      ])
+      ], { dedupe: true })
     )
   }
 
