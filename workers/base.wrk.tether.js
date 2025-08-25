@@ -18,21 +18,47 @@ class TetherWrkBase extends WrkBase {
       ['fac', 'hp-svc-facs-net', 'r0', 'r0', () => ({ fac_store: this.store_s0 }), 1]
     ])
 
+    const name = `wrk:proc:${this.ctx.wtype}:${process.pid}`
+
     const stdout = pino.destination(1)
     const stderr = pino.destination(2)
-    this.logger = pino(
-      {
-        name: `wrk:proc:${this.ctx.wtype}:${process.pid}`,
-        level: this.conf.debug || this.ctx.debug ? 'debug' : 'info',
-        enabled: this.ctx.logging ?? true
-      },
-      pino.multistream([
-        { level: 'info', stream: stdout },
-        { level: 'error', stream: stderr },
-        { level: 'warn', stream: stderr },
-        { level: 'fatal', stream: stderr }
-      ], { dedupe: true })
-    )
+    if (this.conf.lokiUrl && this.conf.loggingSecretKey && this.conf.loggingTopic) {
+      this.logger = pino(
+        {
+          name,
+          level: this.conf.debug || this.ctx.debug ? 'debug' : 'info',
+          enabled: this.ctx.logging ?? true,
+          transport: {
+            target: './lib/pino-hyperswarm-exporter',
+            options: {
+              topic: 'pino-logs-channel-1',
+              app: name,
+              secretKey: 'my-secret-key-123'
+            }
+          }
+        },
+        pino.multistream([
+          { level: 'info', stream: stdout },
+          { level: 'error', stream: stderr },
+          { level: 'warn', stream: stderr },
+          { level: 'fatal', stream: stderr }
+        ], { dedupe: true })
+      )
+    } else {
+      this.logger = pino(
+        {
+          name: `wrk:proc:${this.ctx.wtype}:${process.pid}`,
+          level: this.conf.debug || this.ctx.debug ? 'debug' : 'info',
+          enabled: this.ctx.logging ?? true
+        },
+        pino.multistream([
+          { level: 'info', stream: stdout },
+          { level: 'error', stream: stderr },
+          { level: 'warn', stream: stderr },
+          { level: 'fatal', stream: stderr }
+        ], { dedupe: true })
+      )
+    }
   }
 
   getRpcKey () {
