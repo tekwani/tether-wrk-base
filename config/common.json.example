@@ -1,5 +1,3 @@
 {
-  "debug": 0,
-  "loggingSecretKey": "my-secret-key-123",
-  "loggingTopic": "pino-logs-channel-1"
+  "debug": 0
 }

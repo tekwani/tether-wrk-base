@@ -3,8 +3,8 @@
     "debug": 0,
     "transport": {
       "enabled": true,
-      "loggingSecretKey": "my-secret-key-123",
-      "loggingTopic": "pino-logs-channel-1"
+      "secretKey": "my-secret-key-123",
+      "topic": "pino-logs-channel-1"
     }
   }
 }
