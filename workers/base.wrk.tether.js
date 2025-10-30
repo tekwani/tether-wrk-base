@@ -37,6 +37,21 @@ class TetherWrkBase extends WrkBase {
     return this.status.instanceId
   }
 
+  async addStoreForDataSync (store, discoveryKey) {
+    if (!this.net_r0.swarm) await this.net_r0.startSwarm()
+    this.swarmDiscovery = this.net_r0.swarm.join(discoveryKey || this.getRpcKey())
+
+    this.net_r0.swarm.on('connection', (connection) => {
+      this.logger.info('Swarm: Peer connected')
+      store.replicate(connection)
+    })
+  }
+
+  getDbMeta () {
+    // override to return array of cores' name, key, keyEncoding
+    return []
+  }
+
   async _startRpcServer () {
     await this.net_r0.startRpcServer()
   }
@@ -52,11 +67,23 @@ class TetherWrkBase extends WrkBase {
 
         rpcServer.respond('ping', x => x)
         rpcServer.respond('getInstanceId', (req) => this.net_r0.handleReply('getInstanceId', req))
+        rpcServer.respond('getDbMeta', async (req) => {
+          return await this.net_r0.handleReply('getDbMeta', req)
+        })
 
         this.status.rpcPublicKey = this.getRpcKey().toString('hex')
         this.status.rpcClientKey = this.getRpcClientKey().toString('hex')
 
         this.saveStatus()
+      }
+    ], cb)
+  }
+
+  _stop (cb) {
+    async.series([
+      next => { super._stop(next) },
+      async () => {
+        if (this.swarmDiscovery) await this.swarmDiscovery.destroy()
       }
     ], cb)
   }
