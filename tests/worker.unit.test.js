@@ -47,7 +47,40 @@ hook('teardown hook', async function (t) {
   await teardownHook(wrk, rpc)
 })
 
-test('addStoreForDataSync: starts swarm, joins discovery and replicates on connection', async function (t) {
+test('addStoreForDataSync: creates new swarm, joins discovery and replicates on connection', async function (t) {
+  let createNewSwarmCalled = 0
+  const joinCalls = []
+  let onConnectionHandler = null
+
+  wrk.logger = { info: () => {} }
+  wrk.net_r0 = {
+    async createNewSwarm (name) {
+      createNewSwarmCalled++
+      t.is(name, 'backupSwarm')
+      return {
+        join: (key) => { joinCalls.push(key); return { async destroy () {} } },
+        on: (event, handler) => { if (event === 'connection') onConnectionHandler = handler }
+      }
+    }
+  }
+
+  const store = { replicateCalls: [], replicate (conn) { this.replicateCalls.push(conn) } }
+  const discoveryKey = Buffer.from('discovery-key')
+
+  await wrk.addStoreForDataSync(store, discoveryKey)
+
+  t.is(createNewSwarmCalled, 1)
+  t.is(joinCalls.length, 1)
+  t.is(joinCalls[0], discoveryKey)
+  t.ok(typeof onConnectionHandler === 'function')
+
+  const fakeConn = { id: 1 }
+  onConnectionHandler(fakeConn)
+  t.is(store.replicateCalls.length, 1)
+  t.is(store.replicateCalls[0], fakeConn)
+})
+
+test('addStoreForDataSync: uses base swarm when useBaseSwarm is true', async function (t) {
   let startSwarmCalled = 0
   const joinCalls = []
   let onConnectionHandler = null
@@ -69,7 +102,7 @@ test('addStoreForDataSync: starts swarm, joins discovery and replicates on conne
   const store = { replicateCalls: [], replicate (conn) { this.replicateCalls.push(conn) } }
   const discoveryKey = Buffer.from('discovery-key')
 
-  await wrk.addStoreForDataSync(store, discoveryKey)
+  await wrk.addStoreForDataSync(store, discoveryKey, true)
 
   t.is(startSwarmCalled, 1)
   t.is(joinCalls.length, 1)
