@@ -37,11 +37,6 @@ class TetherWrkBase extends WrkBase {
     return this.status.instanceId
   }
 
-  getDbMeta () {
-    // override to return array of cores' name, key, keyEncoding
-    return []
-  }
-
   async _startRpcServer () {
     await this.net_r0.startRpcServer()
   }
@@ -57,9 +52,6 @@ class TetherWrkBase extends WrkBase {
 
         rpcServer.respond('ping', x => x)
         rpcServer.respond('getInstanceId', (req) => this.net_r0.handleReply('getInstanceId', req))
-        rpcServer.respond('getDbMeta', async (req) => {
-          return await this.net_r0.handleReply('getDbMeta', req)
-        })
 
         this.status.rpcPublicKey = this.getRpcKey().toString('hex')
         this.status.rpcClientKey = this.getRpcClientKey().toString('hex')

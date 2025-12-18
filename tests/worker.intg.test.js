@@ -31,13 +31,6 @@ test('getInstanceId test', async function (t) {
   t.ok(/^tether-wrk-base-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(resp))
 })
 
-test('getDbMeta test', async function (t) {
-  const pubKey = wrk.getRpcKey()
-
-  const resp = await rpcReq(pubKey, 'getDbMeta', {})
-  t.ok(Array.isArray(resp))
-})
-
 hook('teardown hook', async function (t) {
   await teardownHook(wrk, rpc)
 })
